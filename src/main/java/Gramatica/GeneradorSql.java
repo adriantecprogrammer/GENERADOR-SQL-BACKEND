@@ -12,6 +12,7 @@ import Gramatica.gramaticaParser;
 
 
 public class GeneradorSql {
+    public gramaticaParser parser;
     public GeneradorSql(){};
 
     public String generarCodigo(String codigo) {
@@ -25,7 +26,7 @@ public class GeneradorSql {
             ANTLRInputStream input = new ANTLRInputStream(str);
             gramaticaLexer lexer = new gramaticaLexer(input);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
-            gramaticaParser parser = new gramaticaParser(tokens);
+            parser = new gramaticaParser(tokens);
             parser.inicio();
         } catch (Exception ex) {
             ex.printStackTrace();

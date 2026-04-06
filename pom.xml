@@ -69,6 +69,13 @@
             <artifactId>antlr-runtime</artifactId>
             <version>3.5.2</version>
         </dependency>
+        <!-- pom.xml -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>9.6.0</version>
+            <scope>compile</scope>
+        </dependency>
 
 
         <!-- uncomment this to get JSON support

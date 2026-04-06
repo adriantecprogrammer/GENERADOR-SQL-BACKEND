@@ -56,6 +56,9 @@ public class gramaticaParser extends Parser {
 
     List <Tabla> tablas = new ArrayList<Tabla>();
     Tabla tablaActual = null;
+    public String nombreBD = "";
+    public List<String> sqlTablas = new ArrayList<>();
+    private StringBuilder sqlTablaActual = null;
 
 
     public void displayRecognitionError(String[] tokenNames, RecognitionException e) {
@@ -140,6 +143,7 @@ public class gramaticaParser extends Parser {
             {
                 match(input,CREAR,FOLLOW_CREAR_in_creacion36);
                 ID1=(Token)match(input,ID,FOLLOW_ID_in_creacion38);
+                this.nombreBD = (ID1!=null?ID1.getText():null);
                 System.out.println("CREATE DATABASE "+(ID1!=null?ID1.getText():null));
 
             }
@@ -197,8 +201,12 @@ public class gramaticaParser extends Parser {
                 ID3=(Token)match(input,ID,FOLLOW_ID_in_tabla61);
 
                 //código para generar SQL
+                this.sqlTablaActual = new StringBuilder();
+                this.sqlTablaActual.append("CREATE TABLE "+(ID3!=null?ID3.getText():null) );
+                this.sqlTablaActual.append(" ("+(ID3!=null?ID3.getText():null)+"_key INTEGER AUTO_INCREMENT PRIMARY KEY NOT NULL");
+
                 System.out.println("CREATE TABLE "+(ID3!=null?ID3.getText():null) );
-                System.out.println(" ("+(ID3!=null?ID3.getText():null)+"_key INTEGER AUTOINCREMENT NOT NULL");
+                System.out.println(" ("+(ID3!=null?ID3.getText():null)+"_key INTEGER AUTO_INCREMENT PRIMARY KEY NOT NULL");
                 //código para crear estructura de datos
                 Tabla t = new Tabla();
                 t.nombre =(ID3!=null?ID3.getText():null);
@@ -250,6 +258,8 @@ public class gramaticaParser extends Parser {
                 match(input,CERRARTABLA,FOLLOW_CERRARTABLA_in_tabla74);
 
                 System.out.println("   );   ");
+                this.sqlTablaActual.append("   );   ");
+                this.sqlTablas.add(this.sqlTablaActual.toString());
 
             }
 
@@ -325,11 +335,19 @@ public class gramaticaParser extends Parser {
                 }
 
                 //aquí hay que agregar código para generar SQL
-                if(((t!=null?t.getText():null)).compareTo("letras")==0)
+                if(((t!=null?t.getText():null)).compareTo("texto")==0) {
                     System.out.println(", "+(ID4!=null?ID4.getText():null) + " VARCHAR(300)" );
-                else if(((t!=null?t.getText():null)).compareTo("fecha")==0)
+                    this.sqlTablaActual.append(", "+(ID4!=null?ID4.getText():null) + " VARCHAR(300)" );
+                } else if(((t!=null?t.getText():null)).compareTo("fecha")==0) {
                     System.out.println(", "+(ID4!=null?ID4.getText():null) + " DATE" );
-                else  System.out.println(", "+(ID4!=null?ID4.getText():null) + " " +(t!=null?t.getText():null) );
+                    this.sqlTablaActual.append(", "+(ID4!=null?ID4.getText():null) + " DATE" );
+                } else if(((t!=null?t.getText():null)).compareTo("número")==0) {
+                    System.out.println(", "+(ID4!=null?ID4.getText():null) + " INTEGER" );
+                    this.sqlTablaActual.append(", "+(ID4!=null?ID4.getText():null) + " INTEGER" );
+                } else {
+                    System.out.println(", "+(ID4!=null?ID4.getText():null) + " " +(t!=null?t.getText():null) );
+                    this.sqlTablaActual.append(", "+(ID4!=null?ID4.getText():null) + " " +(t!=null?t.getText():null) );
+                }
 
                 //el que sigue es código para crear estructura de datos
                 Atributo a  = new Atributo();
@@ -366,6 +384,9 @@ public class gramaticaParser extends Parser {
 
                 System.out.println(", "+(ID5!=null?ID5.getText():null) + "_id INTEGER" );
                 System.out.println(", FOREIGN KEY ("+(ID5!=null?ID5.getText():null)+"_id) REFERENCES "+(ID5!=null?ID5.getText():null)+"("+(ID5!=null?ID5.getText():null)+"_key)");
+
+                this.sqlTablaActual.append(", "+(ID5!=null?ID5.getText():null) + "_id INTEGER" );
+                this.sqlTablaActual.append(", FOREIGN KEY ("+(ID5!=null?ID5.getText():null)+"_id) REFERENCES "+(ID5!=null?ID5.getText():null)+"("+(ID5!=null?ID5.getText():null)+"_key)");
 
                 //el que sigue es código para crear estructura de datos
                 Atributo a  = new Atributo();
