@@ -1,0 +1,19 @@
+Resumen de comandos para futuro:
+
+  # Construir
+  cd ~/GENERADOR-SQL-BACKEND
+  mvn clean package
+                                                                                                                                                                                                 
+  # Desplegar
+  sudo cp target/GENERADOR-SQL-BACKEND.war /opt/tomcat/webapps/                                                                                                                                  
+                                                                                                                                                                                               
+  # Arrancar                                                                                                                                                                                   
+  sudo /opt/tomcat/bin/startup.sh
+
+  # Detener
+  sudo /opt/tomcat/bin/shutdown.sh
+
+  Copia el WAR con sudo y arranca Tomcat, y listo.
+
+
+  

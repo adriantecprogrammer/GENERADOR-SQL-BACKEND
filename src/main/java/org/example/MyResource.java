@@ -1,7 +1,9 @@
 package org.example;
 
 import Gramatica.GeneradorSql;
+import Gramatica.Tabla;
 import CrearBD.CrearBD;
+import CRUD.GeneradorCRUD;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -64,6 +66,32 @@ public class MyResource {
             return "✅ Base de datos '" + nombreBD + "' y sus " + sqlTablas.size() + " tablas han sido creadas exitosamente.";
         } catch (Exception e) {
             return "❌ Error al procesar la solicitud: " + e.getMessage();
+        }
+    }
+    @POST
+    @Path("generarCRUD")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String generarCRUD(String gramatica){
+        try {
+            generadorSql.generarCodigo(gramatica);
+            if (generadorSql.parser == null) {
+                return "❌ Error: No se pudo inicializar el parser.";
+            }
+            String nombreBD = generadorSql.parser.nombreBD;
+            java.util.List<Tabla> tablas = generadorSql.parser.tablas;
+
+            if (nombreBD == null || nombreBD.isEmpty()) {
+                return "❌ Error: No se encontró el nombre de la base de datos.";
+            }
+            if (tablas == null || tablas.isEmpty()) {
+                return "❌ Error: No se encontraron tablas en la gramática.";
+            }
+
+            GeneradorCRUD generador = new GeneradorCRUD();
+            return generador.generar(nombreBD, tablas);
+        } catch (Exception e) {
+            return "❌ Error al generar CRUD: " + e.getMessage();
         }
     }
 }

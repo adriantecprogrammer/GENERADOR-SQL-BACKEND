@@ -54,7 +54,7 @@ public class gramaticaParser extends Parser {
     @Override public String getGrammarFileName() { return "gramatica.g"; }
 
 
-    List <Tabla> tablas = new ArrayList<Tabla>();
+    public List <Tabla> tablas = new ArrayList<Tabla>();
     Tabla tablaActual = null;
     public String nombreBD = "";
     public List<String> sqlTablas = new ArrayList<>();
