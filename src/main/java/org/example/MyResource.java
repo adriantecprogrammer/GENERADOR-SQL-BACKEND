@@ -40,6 +40,17 @@ public class MyResource {
         return  salida;
     }
     @POST
+    @Path("parser/json")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String parserJSON(String gramatica){
+        try {
+            return generadorSql.generarCodigoJSON(gramatica);
+        } catch (Exception e) {
+            return "{\"error\":\"" + e.getMessage().replace("\"", "'") + "\"}";
+        }
+    }
+    @POST
     @Path("createBD")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
