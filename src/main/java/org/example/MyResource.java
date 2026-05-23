@@ -83,7 +83,7 @@ public class MyResource {
     @Path("generarCRUD")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    public String generarCRUD(String gramatica){
+    public String generarCRUD(String gramatica, @QueryParam("tabla") String nombreTabla){
         try {
             generadorSql.generarCodigo(gramatica);
             if (generadorSql.parser == null) {
@@ -100,7 +100,7 @@ public class MyResource {
             }
 
             GeneradorCRUD generador = new GeneradorCRUD();
-            return generador.generar(nombreBD, tablas);
+            return generador.generar(nombreBD, tablas, nombreTabla);
         } catch (Exception e) {
             return "❌ Error al generar CRUD: " + e.getMessage();
         }

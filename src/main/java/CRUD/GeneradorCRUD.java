@@ -7,11 +7,25 @@ import java.util.List;
 public class GeneradorCRUD {
 
     public String generar(String nombreBD, List<Tabla> tablas) {
+        return generar(nombreBD, tablas, null);
+    }
+
+    public String generar(String nombreBD, List<Tabla> tablas, String nombreTabla) {
+        List<Tabla> tablasFiltradas = tablas;
+        if (nombreTabla != null && !nombreTabla.isBlank()) {
+            tablasFiltradas = tablas.stream()
+                .filter(t -> t.nombre.equalsIgnoreCase(nombreTabla))
+                .toList();
+            if (tablasFiltradas.isEmpty()) {
+                throw new RuntimeException("No se encontró la tabla '" + nombreTabla + "'");
+            }
+        }
+
         StringBuilder sb = new StringBuilder();
         generarHeader(sb, nombreBD);
         generarImports(sb);
         generarConexion(sb, nombreBD);
-        for (Tabla t : tablas) {
+        for (Tabla t : tablasFiltradas) {
             generarRutasTabla(sb, t);
         }
         generarFooter(sb);
