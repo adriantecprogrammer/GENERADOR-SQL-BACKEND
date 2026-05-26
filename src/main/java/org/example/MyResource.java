@@ -4,6 +4,7 @@ import Gramatica.GeneradorSql;
 import Gramatica.Tabla;
 import CrearBD.CrearBD;
 import CRUD.GeneradorCRUD;
+import CRUD.GeneradorHTML;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -103,6 +104,32 @@ public class MyResource {
             return generador.generar(nombreBD, tablas, nombreTabla);
         } catch (Exception e) {
             return "❌ Error al generar CRUD: " + e.getMessage();
+        }
+    }
+    @POST
+    @Path("generarHTML")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_HTML)
+    public String generarHTML(String gramatica, @QueryParam("tabla") String nombreTabla){
+        try {
+            generadorSql.generarCodigo(gramatica);
+            if (generadorSql.parser == null) {
+                return "<h1>Error</h1><p>No se pudo inicializar el parser.</p>";
+            }
+            String nombreBD = generadorSql.parser.nombreBD;
+            java.util.List<Tabla> tablas = generadorSql.parser.tablas;
+
+            if (nombreBD == null || nombreBD.isEmpty()) {
+                return "<h1>Error</h1><p>No se encontró el nombre de la base de datos.</p>";
+            }
+            if (tablas == null || tablas.isEmpty()) {
+                return "<h1>Error</h1><p>No se encontraron tablas en la gramática.</p>";
+            }
+
+            GeneradorHTML generador = new GeneradorHTML();
+            return generador.generar(nombreBD, tablas, nombreTabla);
+        } catch (Exception e) {
+            return "<h1>Error</h1><p>" + e.getMessage() + "</p>";
         }
     }
 }

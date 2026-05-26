@@ -179,6 +179,10 @@ public class GeneradorCRUD {
     }
 
     private void generarFooter(StringBuilder sb) {
+        sb.append("const path = require('path');\n");
+        sb.append("app.get('/', (req, res) => {\n");
+        sb.append("    res.sendFile(path.join(__dirname, 'index.html'));\n");
+        sb.append("});\n\n");
         sb.append("const PORT = 3000;\n");
         sb.append("app.listen(PORT, () => {\n");
         sb.append("    console.log(`CRUD API corriendo en http://localhost:${PORT}`);\n");
